@@ -1,0 +1,25 @@
+{
+  "name": "socailmedia",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@ant-design/cssinjs": "^1.18.0",
+    "@ant-design/happy-work-theme": "^1.0.0",
+    "@clerk/nextjs": "^7.3.2",
+    "antd": "^5.11.5",
+    "next": "16.2.4",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.4"
+  }
+}
