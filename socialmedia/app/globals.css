@@ -9,3 +9,16 @@ body, html{
     max-width: 100vw;
     overflow-x: hidden;
 }
+
+:root{
+    --primary: #f9aa11
+}
+
+.cl-logoImage{
+    width: 9rem;
+    height: 3rem;
+}
+
+.cl-card{
+    box-shadow: none;
+}
