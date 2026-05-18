@@ -1,17 +1,40 @@
 "use client"
-import React, { useCallback } from 'react'
+import { useSettingsContext } from '@/context/settings/settings-context';
+import { ConfigProvider, theme } from 'antd';
+import { useCallback } from 'react'
 
 const ThemeProvider = ({ children }) => {
     const { settings: { theme: globalTheme }, } = useSettingsContext();
     const BoxBg = useCallback(() => {
-        return globalTheme === "dark" ? "rgb(33,43, 54" : "white";
+        return globalTheme === "dark" ? "rgb(33,43, 54)" : "white";
     }, [globalTheme]);
 
     const BaseBg = useCallback(() => {
         return globalTheme === "dark" ? "black" : "#F4F6F8";
     }, [globalTheme]);
+
     return (
-        <div>{children}</div>
+        <ConfigProvider
+            theme={{
+                algorithm:
+                    globalTheme === "light" ? theme.defaultAlgorithm : theme.darkAlgorithm,
+                token: {
+                    fontFamily: "inherit",
+                    colorPrimary: "#F9AA11",
+                    boxbg: BoxBg(),
+                    basebg: BaseBg(),
+                },
+                components: {
+                    Typography: {
+                        fontSize: "none",
+                        lineHeight: "none",
+                        fontWeightStrong: "none",
+                    }
+                }
+            }}
+        >
+            {children}
+        </ConfigProvider >
     )
 }
 
