@@ -1,0 +1,36 @@
+.wrapper{
+    min-width: 18rem;
+    border-radius: 1rem;
+    display: flex;
+    overflow: hidden;
+    min-height: 88vh;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    width: 100%;
+}   
+
+.item{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: background-color 0.2s ease-in-out;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.item:hover{
+    background-color: orange;
+    cursor: pointer;
+}
+
+.item.active{
+    background-color: rgba(128, 122, 115, 0.719);
+}

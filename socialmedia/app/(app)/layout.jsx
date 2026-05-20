@@ -1,9 +1,10 @@
 import { SettigsContextProvider } from '@/context/settings-provider'
 import ThemeProvider from '@/lib/ThemeProvider'
-import {css} from '../../styles/homeLayout.module.css'
+import css from '@/styles/homeLayout.module.css'
 import React from 'react'
-import Box from '@/components/Box/Box'
 import Header from '@/components/Header'
+import Box from '@/components/Box/Box'
+import Sidebar from '@/components/Sidebar'
 
 
 const HomeLayout = ({ children }) => {
@@ -14,12 +15,19 @@ const HomeLayout = ({ children }) => {
           style={{
             position: 'relative', 
             width: '100vw', 
-            height: '100vh'
+            minHeight: '100vh',
+            overflow: 'auto'
           }}
         >
 
           <div className={css.wrapper}>
             <Header/>
+            <div className={css.container}>
+              <Sidebar/>
+              <div className={css.page_body}>
+                {children}
+              </div>
+            </div>
           </div>
         </Box>
       </ThemeProvider>
