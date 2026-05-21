@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Flex } from 'antd'
 import { UserButton } from '@clerk/nextjs'
 import ModeButton from './Box/ModeButton'
+import SidebarButton from './SidebarButton'
 
 
 const Header = () => {
@@ -12,6 +13,11 @@ const Header = () => {
         <div className={css.wrapper}>
             <Box style={{ height: "100%" }}>
                 <div className={css.container}>
+
+                    {/*sidebar Button*/}
+                    <div className={css.sidebarButton}>
+                        <SidebarButton/>
+                    </div>
 
                     {/* logo left-side */}
 

@@ -23,5 +23,16 @@
     justify-content: space-between;
 }
 
+.sidebarButton{
+    display: none;
+}
 
+@media (max-width: 1268px) {
+    .logo{
+        display: none;
+    }
+     .sidebarButton{
+        display: block;
+    }
+}
 
