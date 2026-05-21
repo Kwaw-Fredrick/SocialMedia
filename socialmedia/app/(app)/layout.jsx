@@ -1,4 +1,4 @@
-import { SettigsContextProvider } from '@/context/settings-provider'
+import { SettingsContextProvider } from '@/context/settings-provider'
 import ThemeProvider from '@/lib/ThemeProvider'
 import css from '@/styles/homeLayout.module.css'
 import React from 'react'
@@ -9,7 +9,7 @@ import Sidebar from '@/components/Sidebar'
 
 const HomeLayout = ({ children }) => {
   return (
-    <SettigsContextProvider>
+    <SettingsContextProvider>
       <ThemeProvider>
         <Box type="baseBg"
           style={{
@@ -31,7 +31,7 @@ const HomeLayout = ({ children }) => {
           </div>
         </Box>
       </ThemeProvider>
-    </SettigsContextProvider>
+    </SettingsContextProvider>
   )
 }
 

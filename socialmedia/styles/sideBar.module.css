@@ -34,3 +34,9 @@
 .item.active{
     background-color: rgba(128, 122, 115, 0.719);
 }
+
+/* for mobile */
+
+.drawerContainer{
+    height: 100%;
+}
