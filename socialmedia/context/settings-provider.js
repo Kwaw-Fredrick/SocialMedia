@@ -1,14 +1,14 @@
 'use client'
 import { useState } from "react"
-import { SettigsContext } from "./settings/settings-context";
+import { SettingsContext } from "./settings/settings-context";
 
-export const SettigsContextProvider= ({children})=>{
+export const SettingsContextProvider= ({children})=>{
     const [settings, setSettings] = useState({
         theme: "light", 
-        isSidebarOpen: false});
+        isSidebarOpen: true});
     return(
-        <SettigsContext.Provider value={{settings, setSettings}}>
+        <SettingsContext.Provider value={{settings, setSettings}}>
             {children}
-        </SettigsContext.Provider>
+        </SettingsContext.Provider>
     )
 }
