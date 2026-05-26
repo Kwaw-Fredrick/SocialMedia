@@ -19,9 +19,12 @@ const SidebarContainer = ({isDrawerOpen,setIsDrawerOpen ,children, ...other }) =
     </Drawer>
   );
  } else{
-    return (        
-            {children}
-    )
+    return        
+
+    <>
+    {children}
+    
+    </>
  }
 };
 
