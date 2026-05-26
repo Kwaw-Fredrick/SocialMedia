@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import css from '@/styles/sideBar.module.css'
 import { sideBarRoutes } from '@/lib/ThemeProvider/sideBarRoutes'
 import Link from 'next/link'
@@ -16,6 +16,11 @@ const Sidebar = () => {
     const router = useRouter();
     const { signOut } = useClerk();
     const pathname = usePathname();
+    const[mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, []);
 
     const { settings: { isSidebarOpen }, setSettings } = useSettingsContext();
 
@@ -35,7 +40,8 @@ const Sidebar = () => {
         return isActive(route) && "var(--primary)";
     }
     return (
-        <SidebarContainer isDrawerOpen={isSidebarOpen} setIsDrawerOpen={handleDrawerClose}>
+      mounted && 
+      (<SidebarContainer isDrawerOpen={isSidebarOpen} setIsDrawerOpen={handleDrawerClose}>
             <div className={css.wrapper}>
                 <Box className={css.container}>
                     {
@@ -73,9 +79,8 @@ const Sidebar = () => {
                 </Box >
             </div >
         </SidebarContainer>
-
-
     )
+)
 }
 
 export default Sidebar
