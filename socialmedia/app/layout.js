@@ -3,7 +3,7 @@ import "@/styles/typography.css"
 import "./globals.css";
 import StyledComponentsRegistry from "@/lib/AntRegistry";
 import { ClerkProvider, SignIn } from "@clerk/nextjs";
-
+ 
 const publicSans = Public_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
