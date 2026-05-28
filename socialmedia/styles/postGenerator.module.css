@@ -8,6 +8,19 @@
     overflow: hidden;
     position: relative;
 }
+
+.previewContainer{
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.preview{
+    object-fit: cover;
+    width: 100%;
+    border-radius: 1rem;
+}
+
 .bottom{
     width: 100%;
 }
