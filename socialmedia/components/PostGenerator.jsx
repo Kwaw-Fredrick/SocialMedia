@@ -12,7 +12,28 @@ const PostGenerator = () => {
     const {user} = useUser();
     const [postText, setPostText] = useState("");
     const imgInputRef = React.useRef(null);
-    const vidInputRef = React.useRef(null)
+    const vidInputRef = React.useRef(null);
+    const [fileType, setFileType] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null)
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        //limit of 5mb
+        if(file && file.size <= 5 * 1024 * 1024){
+            alert("File size is greater than 5mb. Please select a smaller file.");
+            return;
+        };
+
+        if(file && (file.type.startsWith("image/") || file.type.startsWith("video/"))){
+            setFileType(file.type.split("/")[0]);
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                setSelectedFile(reader.result)
+            } 
+    }
+}
   return (
     <>
     <div className="css.postGenWrapper">
@@ -41,7 +62,9 @@ const PostGenerator = () => {
             <Flex className={css.bottom}
             align='center' justify='space-between'
             >
-                <Button type="text" style={{background:"borderColor"}}> 
+                <Button type="text" style={{background:"borderColor"}}
+                onClick={()=>{imgInputRef.current.click()}}
+                > 
                     <Flex 
                     align='center'
                     gap={"0.5rem"}
@@ -56,7 +79,9 @@ const PostGenerator = () => {
                 </Button>
 
                 {/*video upload button*/}
-                <Button type="text" style={{background:"borderColor"}}> 
+                <Button type="text" style={{background:"borderColor"}}
+                onClick={()=>{vidInputRef.current.click()}}
+                > 
                     <Flex align='center'gap={"0.5rem"}>
                         <Icon 
                         icon="lucide:video"
@@ -84,17 +109,27 @@ const PostGenerator = () => {
     </div>
 
     {/*hidden Button*/}
-    {/*button to accept image file*/}
+    {/*button to accept image files*/}
     <input 
     type="file" 
     accept='image/*' 
     multiple={false} 
     style={{display: "none"}}
-
     ref={imgInputRef}
+    onChange={(e)=>handleFileChange(e)}
+    />
+
+    {/*button to accept video files*/}
+    <input 
+    type="file" 
+    accept='video/*' 
+    multiple={false} 
+    style={{display: "none"}}
+    ref={vidInputRef}
+    onChange={(e)=>handleFileChange(e)}
     />
     </>
   )
 }
 
-export default PostGenerator
+export default PostGenerator   
