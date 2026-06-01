@@ -21,6 +21,12 @@
     border-radius: 1rem;
 }
 
+.removeBtn{
+    z-index: 2;
+    right: 1rem;
+    top: 1rem;
+}
+
 .bottom{
     width: 100%;
 }

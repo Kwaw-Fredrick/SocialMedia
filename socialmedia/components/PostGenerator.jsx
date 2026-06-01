@@ -7,6 +7,7 @@ import { Avatar, Button, Flex, Image, Typography } from 'antd'
 import { useUser } from '@clerk/nextjs'
 import Input from 'antd/es/input/Input'
 import { Icon } from '@iconify/react'
+import toast from 'react-hot-toast'
 
 const PostGenerator = () => {
     const { user } = useUser();
@@ -19,7 +20,7 @@ const PostGenerator = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         //limit of 20mb
-        if (file && file.size >20 * 1024 * 1024) {
+        if (file && file.size > 20 * 1024 * 1024) {
             alert("max 20MB allowed");
             return;
         };
@@ -33,6 +34,24 @@ const PostGenerator = () => {
                 setSelectedFile(reader.result)
             }
         }
+    };
+
+
+    const handleRemove = () => {
+        setSelectedFile(null);
+        setFileType(null);
+    }
+
+    const showError = (msg="Something went wrong! Try again.") => {
+        toast.error(msg)
+    } 
+
+    const submitPost = () => {
+        if((postText ==="" || postText.trim() === "") && !selectedFile){
+            {
+                showError('can\'t make an empty post')
+                return;
+            }
     }
     return (
         <>
@@ -60,26 +79,43 @@ const PostGenerator = () => {
                         {
                             fileType && (
                                 <div className={css.previewContainer}>
+
+                                    {/*remove button*/}
+
+                                    <Button
+                                        type="default"
+                                        className={css.removeBtn}
+                                        style={{
+                                            position: "absolute",
+                                        }}
+                                    >
+                                        <Typography
+                                            className="typoCaption"
+                                            onClick={handleRemove}
+                                        >
+                                            Remove
+                                        </Typography>
+                                    </Button>
                                     {
                                         fileType === "image" && (
-                                            <Image src={selectedFile} 
-                                            alt="Selected Image" 
-                                            className={css.preview} 
-                                            height={"10"}
-                                            width={"20%"}
+                                            <Image src={selectedFile}
+                                                alt="Selected Image"
+                                                className={css.preview}
+                                                height={"10"}
+                                                width={"20%"}
                                             />
                                         )
                                     }
 
 
-                                     {
+                                    {
                                         fileType === "video" && (
-                                            <video src={selectedFile} 
-                                            alt="Selected Video"
-                                            controls 
-                                            className={css.preview} 
-                                            height={"300"}
-                                            width={"100%"}
+                                            <video src={selectedFile}
+                                                alt="Selected Video"
+                                                controls
+                                                className={css.preview}
+                                                height={"300"}
+                                                width={"100%"}
                                             />
                                         )
                                     }
@@ -159,6 +195,6 @@ const PostGenerator = () => {
             />
         </>
     )
+  }
 }
-
-export default PostGenerator   
+export default PostGenerator 

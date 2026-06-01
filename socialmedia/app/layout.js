@@ -3,6 +3,7 @@ import "@/styles/typography.css"
 import "./globals.css";
 import StyledComponentsRegistry from "@/lib/AntRegistry";
 import { ClerkProvider, SignIn } from "@clerk/nextjs";
+import QueryProvider from "@/lib/QueryProvider";
  
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -35,7 +36,9 @@ export default function RootLayout({ children }) {
     >
       <html lang="en">
         <body className={publicSans.className}>
+        <QueryProvider>
           <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </QueryProvider>
         </body>
       </html>
     </ClerkProvider>
