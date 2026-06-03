@@ -8,6 +8,7 @@ import { useUser } from '@clerk/nextjs'
 import Input from 'antd/es/input/Input'
 import { Icon } from '@iconify/react'
 import toast from 'react-hot-toast'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const PostGenerator = () => {
     const { user } = useUser();
@@ -15,7 +16,24 @@ const PostGenerator = () => {
     const imgInputRef = React.useRef(null);
     const vidInputRef = React.useRef(null);
     const [fileType, setFileType] = useState(null);
-    const [selectedFile, setSelectedFile] = useState(null)
+    const [selectedFile, setSelectedFile] = useState(null);
+    const queryClient = useQueryClient();
+
+    const { mutate: execute, isPending } = useMutation({
+        mutatationFn: (data) => createPost(data),
+        onSuccess: () => {
+            handleSucess();
+            queryClient.invalidateQueries("posts");
+        },
+        onError: () => showError("Something went wrong! Try again.")
+    });
+
+    const handleSuccess = () => {
+        setSelectedFile(null);
+        setFileType(null);
+        setPostText("");
+        toast.success("Post created successfully!")
+    }
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -42,17 +60,17 @@ const PostGenerator = () => {
         setFileType(null);
     }
 
-    const showError = (msg="Something went wrong! Try again.") => {
+    const showError = (msg = "Something went wrong! Try again.") => {
         toast.error(msg)
-    } 
-
-    const submitPost = () => {
-        if((postText ==="" || postText.trim() === "") && !selectedFile){
-            {
-                showError('can\'t make an empty post')
-                return;
-            }
     }
+    const submitPost = () => {
+        if ((postText === "" || postText.trim() === "") && !selectedFile) {
+            showError("can't make an empty post");
+            return;
+        }
+
+        execute({ postText, media: selectedFile, fileType });
+    };
     return (
         <>
             <div className="css.postGenWrapper">
@@ -195,6 +213,6 @@ const PostGenerator = () => {
             />
         </>
     )
-  }
 }
+
 export default PostGenerator 

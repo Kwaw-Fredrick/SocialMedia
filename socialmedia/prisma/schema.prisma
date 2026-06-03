@@ -1,13 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -19,44 +16,55 @@ model User {
   image_url     String?
   banner_url    String?
   username      String? @unique
-  posts         Post[]
+
+  posts    Post[]
+  likes    Like[]
+  comments Comment[]
 }
 
 model Post {
-  id      int   @id @default(autoincrement())
-  postText      String?
-  media         String?
-  author        User @relation(fields: [autoId], reference:[id], onDelete:Cascade)
-  author        String
-  cld_id        String?
-  createdAt     DateTime @default(now())
-  likes         Like[]
-  comments      Comment[]
-  trends        Trend[]
+  id        Int      @id @default(autoincrement())
+  postText  String?
+  media     String?
+  cld_id    String?
+  createdAt DateTime @default(now())
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  likes    Like[]
+  comments Comment[]
+  trends   Trend[]
 }
 
 model Like {
-  id   Int   @id @default(autoincrement())
-  post Post  @relation(fields:[postId], reference:[id], onDelete:Cascade)
-  postId Int 
-  author User @relation(fields: [authorId], reference:[id], onDelete: Cascade)
+  id Int @id @default(autoincrement())
+
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
   authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
 }
 
 model Comment {
-  id        Int     @id @default(autoincrement())
-  comments  Comment?
-  author    User    relation(fields:[authorId], reference:[id], onDelete: Cascade )
+  id Int @id @default(autoincrement())
 
-  post      Post relation(fields: [postId], reference: [id], onDelete: Cascade)
-  postId    Int
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
 }
 
 model Trend {
-  id        Int  @id @default(autoincrement())
-  name      String
-  post      Post(fields:[postId], reference:[id], onDelete: Cascade)
-  postId    int @
+  id   Int    @id @default(autoincrement())
+  name String
+
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
