@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from "@/lib/db"; // adjust path if needed
+import { db } from "@/lib/db"; 
 
 export const createUser = async ({ user }) => {
     const {

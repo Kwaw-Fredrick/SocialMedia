@@ -3,12 +3,13 @@
 import React, { useState } from 'react'
 import css from '@/styles/postGenerator.module.css'
 import Box from './Box/Box'
-import { Avatar, Button, Flex, Image, Typography } from 'antd'
+import { Avatar, Button, Flex, Image, Spin, Typography } from 'antd'
 import { useUser } from '@clerk/nextjs'
 import Input from 'antd/es/input/Input'
 import { Icon } from '@iconify/react'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createPost } from '@/actions/Post'
 
 const PostGenerator = () => {
     const { user } = useUser();
@@ -73,6 +74,14 @@ const PostGenerator = () => {
     };
     return (
         <>
+        <Spin
+        spinning={isPending}
+        description={
+            <Typography className="typoBody1" style={{marginTop: "1rem"}}>
+                Uploading post
+            </Typography>
+        }
+        >
             <div className="css.postGenWrapper">
                 <Box className={css.container}>
                     {/*top side */}
@@ -190,6 +199,7 @@ const PostGenerator = () => {
                     </Flex>
                 </Box>
             </div>
+        </Spin>
 
             {/*hidden Button*/}
             {/*button to accept image files*/}
