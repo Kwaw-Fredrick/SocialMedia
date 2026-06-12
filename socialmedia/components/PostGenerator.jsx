@@ -21,12 +21,15 @@ const PostGenerator = () => {
     const queryClient = useQueryClient();
 
     const { mutate: execute, isPending } = useMutation({
-        mutatationFn: (data) => createPost(data),
+        mutationFn: (data) => createPost(data),
         onSuccess: () => {
-            handleSucess();
+            handleSuccess();
             queryClient.invalidateQueries("posts");
         },
-        onError: () => showError("Something went wrong! Try again.")
+        onError: (error) => {
+            console.log("CREATE POST ERROR:", error);
+            showError(error?.message || "Something went wrong!");
+        }
     });
 
     const handleSuccess = () => {
@@ -74,132 +77,132 @@ const PostGenerator = () => {
     };
     return (
         <>
-        <Spin
-        spinning={isPending}
-        description={
-            <Typography className="typoBody1" style={{marginTop: "1rem"}}>
-                Uploading post
-            </Typography>
-        }
-        >
-            <div className="css.postGenWrapper">
-                <Box className={css.container}>
-                    {/*top side */}
-                    <Flex vertical gap={'1rem'} align='flex-start'>
-                        <Flex style={{ width: "100%" }} gap={"1rem"}>
-                            <Avatar src={user?.imageUrl}
-                                style={{
-                                    width: "2.6rem",
-                                    height: "2.6rem",
-                                    boxShadow: "var(--avatar-shadow)"
-                                }}
-                            />
+            <Spin
+                spinning={isPending}
+                description={
+                    <Typography className="typoBody1" style={{ marginTop: "1rem" }}>
+                        Uploading post
+                    </Typography>
+                }
+            >
+                <div className="css.postGenWrapper">
+                    <Box className={css.container}>
+                        {/*top side */}
+                        <Flex vertical gap={'1rem'} align='flex-start'>
+                            <Flex style={{ width: "100%" }} gap={"1rem"}>
+                                <Avatar src={user?.imageUrl}
+                                    style={{
+                                        width: "2.6rem",
+                                        height: "2.6rem",
+                                        boxShadow: "var(--avatar-shadow)"
+                                    }}
+                                />
 
-                            <Input.TextArea
-                                placeholder="Share what you are thinking......"
-                                style={{ height: 80, resize: "none", flex: "1 " }}
-                                value={postText}
-                                onChange={(e) => setPostText(e.target.value)}
-                            />
+                                <Input.TextArea
+                                    placeholder="Share what you are thinking......"
+                                    style={{ height: 80, resize: "none", flex: "1 " }}
+                                    value={postText}
+                                    onChange={(e) => setPostText(e.target.value)}
+                                />
 
-                        </Flex>
-                        {
-                            fileType && (
-                                <div className={css.previewContainer}>
+                            </Flex>
+                            {
+                                fileType && (
+                                    <div className={css.previewContainer}>
 
-                                    {/*remove button*/}
+                                        {/*remove button*/}
 
-                                    <Button
-                                        type="default"
-                                        className={css.removeBtn}
-                                        style={{
-                                            position: "absolute",
-                                        }}
-                                    >
-                                        <Typography
-                                            className="typoCaption"
-                                            onClick={handleRemove}
+                                        <Button
+                                            type="default"
+                                            className={css.removeBtn}
+                                            style={{
+                                                position: "absolute",
+                                            }}
                                         >
-                                            Remove
-                                        </Typography>
-                                    </Button>
-                                    {
-                                        fileType === "image" && (
-                                            <Image src={selectedFile}
-                                                alt="Selected Image"
-                                                className={css.preview}
-                                                height={"10"}
-                                                width={"20%"}
-                                            />
-                                        )
-                                    }
+                                            <Typography
+                                                className="typoCaption"
+                                                onClick={handleRemove}
+                                            >
+                                                Remove
+                                            </Typography>
+                                        </Button>
+                                        {
+                                            fileType === "image" && (
+                                                <Image src={selectedFile}
+                                                    alt="Selected Image"
+                                                    className={css.preview}
+                                                    height={"10"}
+                                                    width={"20%"}
+                                                />
+                                            )
+                                        }
 
 
-                                    {
-                                        fileType === "video" && (
-                                            <video src={selectedFile}
-                                                alt="Selected Video"
-                                                controls
-                                                className={css.preview}
-                                                height={"300"}
-                                                width={"100%"}
-                                            />
-                                        )
-                                    }
-                                </div>
-                            )
-                        }
+                                        {
+                                            fileType === "video" && (
+                                                <video src={selectedFile}
+                                                    alt="Selected Video"
+                                                    controls
+                                                    className={css.preview}
+                                                    height={"300"}
+                                                    width={"100%"}
+                                                />
+                                            )
+                                        }
+                                    </div>
+                                )
+                            }
 
-                        {/*bottom button*/}
-                        <Flex className={css.bottom}
-                            align='center' justify='space-between'
-                        >
-                            <Button type="text" style={{ background: "borderColor" }}
-                                onClick={() => { imgInputRef.current.click() }}
+                            {/*bottom button*/}
+                            <Flex className={css.bottom}
+                                align='center' justify='space-between'
                             >
-                                <Flex
-                                    align='center'
-                                    gap={"0.5rem"}
+                                <Button type="text" style={{ background: "borderColor" }}
+                                    onClick={() => { imgInputRef.current.click() }}
                                 >
-                                    <Icon
-                                        icon={"solar:camera-linear"}
-                                        width={"1.2rem"}
-                                        color="var(--primary)"
-                                    />
-                                    <Typography className="typoSubtitle2">Image</Typography>
-                                </Flex>
-                            </Button>
+                                    <Flex
+                                        align='center'
+                                        gap={"0.5rem"}
+                                    >
+                                        <Icon
+                                            icon={"solar:camera-linear"}
+                                            width={"1.2rem"}
+                                            color="var(--primary)"
+                                        />
+                                        <Typography className="typoSubtitle2">Image</Typography>
+                                    </Flex>
+                                </Button>
 
-                            {/*video upload button*/}
-                            <Button type="text" style={{ background: "borderColor" }}
-                                onClick={() => { vidInputRef.current.click() }}
-                            >
-                                <Flex align='center' gap={"0.5rem"}>
-                                    <Icon
-                                        icon="lucide:video"
-                                        width={"1.2rem"}
-                                        color="#5856D6"
-                                    />
-                                    <Typography className="typoSubtitle2">Video</Typography>
-                                </Flex>
-                            </Button>
-                            {/*post Button*/}
-                            <Button type='primary' style={{ marginLeft: "auto" }}>
-                                <Flex align='center' gap={'0.5rem'}>
-                                    <Icon
-                                        icon="iconamoon:send-fill"
-                                        width={'1.2rem'}
-                                    />
-                                    <Typography className="typoSubtitle2" style={{ color: "white" }}>
-                                        Post
-                                    </Typography>
-                                </Flex>
-                            </Button>
+                                {/*video upload button*/}
+                                <Button type="text" style={{ background: "borderColor" }}
+                                    onClick={() => { vidInputRef.current.click() }}
+                                >
+                                    <Flex align='center' gap={"0.5rem"}>
+                                        <Icon
+                                            icon="lucide:video"
+                                            width={"1.2rem"}
+                                            color="#5856D6"
+                                        />
+                                        <Typography className="typoSubtitle2">Video</Typography>
+                                    </Flex>
+                                </Button>
+                                {/*post Button*/}
+                                <Button type='primary' style={{ marginLeft: "auto" }} onClick={submitPost}>
+                                    <Flex align='center' gap={'0.5rem'}>
+                                        <Icon
+                                            icon="iconamoon:send-fill"
+                                            width={'1.2rem'}
+                                        />
+                                        <Typography className="typoSubtitle2" style={{ color: "white" }}>
+                                            Post
+                                        </Typography>
+                                    </Flex>
+                                </Button>
+                            </Flex>
                         </Flex>
-                    </Flex>
-                </Box>
-            </div>
-        </Spin>
+                    </Box>
+                </div>
+            </Spin>
 
             {/*hidden Button*/}
             {/*button to accept image files*/}

@@ -29,7 +29,7 @@ export const createUser = async ({ user }) => {
                 id,
                 first_name,
                 last_name,
-                email,
+                email_address: email,
                 image_url,
                 username
             }
@@ -46,7 +46,7 @@ export const createUser = async ({ user }) => {
                     id,
                     first_name,
                     last_name,
-                    email,
+                    email_address: email,
                     image_url,
                     username
                 })
@@ -70,7 +70,7 @@ export const updateUser = async (user) => {
         id,
         first_name,
         last_name,
-        email,
+        email_address: email,
         image_url,
         username
     } = user;
@@ -83,7 +83,7 @@ export const updateUser = async (user) => {
             data: {
                 first_name,
                 last_name,
-                email,
+                email_address: email,
                 image_url,
                 username
             }
@@ -125,7 +125,7 @@ export const getUser = async (id) => {
                 id: true,
                 first_name: true,
                 last_name: true,
-                email: true,
+                email_address: true,
                 image_url: true,
                 username: true,
                 banner_url: true,

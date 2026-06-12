@@ -4,96 +4,84 @@ import { db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { uploadFile } from "./uploadFile";
 
-export const createPost = async (post) =>{
-    try {
-        const {postText, media} = post;
-        const user = await currentUser();
-        
-        let cld_id;
-        let assertUrl
-        if(media){
-                   const res = await uploadFile(media, `/posts/${user?.id}`)
-                   const {public_id, secure_url} = res;
-                   cld_id = public_id,
-                   assertUrl = secure_url
-        }
+export const createPost = async (post) => {
+  try {
+    const { postText, media } = post;
 
-        const newPost = await db.post.create({
-            data : {
-                postText,
-                media: assertUrl, cld_id,
-                author:{
-                    connect:{
-                        id: user?.id
-                    }
-                }
-            }
-        })
+    const clerkUser = await currentUser();
 
-        console.log(newPost)
-        return{
-            data: newPost
-        }
-
-    } catch (error) {
-        console.log(error?.message);
-        throw new Error("Failed to create post");
+    if (!clerkUser?.id) {
+      throw new Error("Not authenticated");
     }
-}
 
-export const getMyFeedPosts = async (lastCursor)=>{
-    try {
-        const take = 5
-        const posts = await db.post.findMany({
-            include:{
-                author: true,
-            },
-            take,
-            ...(lastCursor && {
-                skip: 1,
-                cursor: {
-                    id: lastCursor,
-                } 
-            }),
-            orderBy:{
-                createdAt: 'desc'
-            }
-        })
+    // ✅ ensure user exists
+    const dbUser = await db.user.upsert({
+      where: { id: clerkUser.id },
+      update: {},
+      create: {
+        id: clerkUser.id,
+        email_address: clerkUser.emailAddresses?.[0]?.emailAddress,
+        first_name: clerkUser.firstName,
+        last_name: clerkUser.lastName,
+        image_url: clerkUser.imageUrl,
+        username: clerkUser.username || undefined
+      }
+    });
 
-        if (posts.length === 0){
-            return{
-                data: [],
-                metaData:{
-                    lastCursor: null,
-                    hasMore: false
-                },
-            };
-        }
+    let cld_id = null;
+    let assertUrl = null;
 
-        const lastPostInResults = posts[posts.length - 1];
-        const cursor = lastPostInResults.id;
-        const morePosts = await db.post.findMany({
-            take,
-            skip:1,
-            cursor: {
-                id : cursor
-            },
-            orderBy:{
-                createdAt: 'desc'
-            }
-        })
-
-        return{
-            data: posts,
-            metaData:{
-                lastCursor: cursor,
-                hasMore: morePosts.length > 0
-            }
-        }
-    } catch (error) {
-        console.log(e);
-        throw new Error("Failed to fetch a post");
-        
-        
+    if (media) {
+      const res = await uploadFile(media, `/posts/${clerkUser.id}`);
+      cld_id = res.public_id;
+      assertUrl = res.secure_url;
     }
-}
+
+    const newPost = await db.post.create({
+      data: {
+        postText,
+        media: assertUrl,
+        cld_id,
+        authorId: dbUser.id
+      }
+    });
+
+    return { data: newPost };
+
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to create post");
+  }
+};
+
+export const getMyFeedPosts = async (lastCursor) => {
+  try {
+    const take = 5;
+
+    const posts = await db.post.findMany({
+      include: {
+        author: true,
+      },
+      take,
+      ...(lastCursor && {
+        skip: 1,
+        cursor: { id: lastCursor },
+      }),
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return {
+      data: posts,
+      metaData: {
+        lastCursor: posts.at(-1)?.id ?? null,
+        hasMore: posts.length === take,
+      },
+    };
+
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch posts");
+  }
+};

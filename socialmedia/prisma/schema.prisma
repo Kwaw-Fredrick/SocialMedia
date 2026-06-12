@@ -16,6 +16,8 @@ model User {
   image_url     String?
   banner_url    String?
   username      String? @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   posts    Post[]
   likes    Like[]
@@ -27,39 +29,44 @@ model Post {
   postText  String?
   media     String?
   cld_id    String?
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  likes    Like[]
-  comments Comment[]
-  trends   Trend[]
+  likes     Like[]
+  comments  Comment[]
+  trends    Trend[]
 }
-
 model Like {
   id Int @id @default(autoincrement())
 
   postId Int
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   authorId String
-  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
-}
 
+  @@unique([postId, authorId])
+}
 model Comment {
   id Int @id @default(autoincrement())
 
+  content String
+
   authorId String
-  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   postId Int
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
+
 
 model Trend {
   id   Int    @id @default(autoincrement())
