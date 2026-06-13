@@ -18,3 +18,13 @@
     overflow: hidden;
     display: flex;
 }
+
+
+.media video{
+    max-height: 40rem;
+}
+
+.media img{
+    object-fit: cover;
+    border-radius: 1rem;
+}

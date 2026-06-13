@@ -1,10 +1,10 @@
 import React from 'react'
 import css from '../styles/post.module.css'
 import { Avatar, Flex, Image, Typography } from 'antd'
-import css from 'styled-jsx/css'
 import Box from './Box/Box'
 import { getFileTypeFromUrl } from '@/utils'
-const Post = ({ data }) => {
+import LikeButton from './LikeButton'
+const Post = ({ data, querryId   }) => {
     return (
         <div className={css.wrapper}>
            <Box className={css.container}>
@@ -63,10 +63,17 @@ const Post = ({ data }) => {
                         src={data?.media} 
                         alt="Post media"  
                         controls
+                        style={{height: "100%", width: "100%"}}
                         />
                     </div>
                 )
             }
+
+            {/*actions*/}
+            <Flex align="center" gap={'.5rem'} className={css.actions}>
+                    <LikeButton postId={data?.id} likes={data?.likes} querryId={querryId} />
+                    <span> Comments </span>
+            </Flex>
            </Box>
         </div>
     )

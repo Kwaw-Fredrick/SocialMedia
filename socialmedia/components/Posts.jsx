@@ -7,7 +7,7 @@ import React, { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import Post from './Post'
 
-const Posts = () => {
+const Posts = (id ="all") => {
     const { ref, inView } = useInView()
 
     const checkLastViewRef = (index, page) => {
@@ -50,13 +50,13 @@ const Posts = () => {
                                 ref={ref}
                                 key={post?.id}
                             >
-                                <Post data={post} />
+                                <Post data={post} querryId={Id} />
                             </div>
                         ) : (
                             <div
                                 key={post?.id}
                             >
-                                <Post data={post} />
+                                <Post data={post} querryId={Id} />
                             </div>
                         )
                     )
