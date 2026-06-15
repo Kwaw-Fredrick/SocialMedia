@@ -87,3 +87,92 @@ export const getMyFeedPosts = async (lastCursor) => {
     throw new Error("Failed to fetch posts");
   }
 };
+
+
+export const updatePostLike = async(params) => {
+  const {postId, actionType : type} = params; 
+  try {
+    const {id: userId} = await currentUser();
+    
+    //find post in DB*
+    
+    const post = await db.post.findUnique({
+      where: {
+        id: postId
+      },
+      include: {
+        likes: true
+      }
+    })
+
+    if(!post){
+      return{
+        error: "Post not found",
+      };
+    }
+
+    // check if user has already liked the post or not 
+    const like =  post.likes.find((like) => like.authorId === userId);
+
+    // check if user has already liked it
+    if(like){
+      if (type === "like"){
+        return{
+          data: post 
+        }
+      }
+    
+
+    //otherwise delete the like 
+    else {
+      await db.like.delete({
+        where:{
+          id: like.id,
+        },
+      });
+      console.log("like deleted")
+    }}else{
+      // if user is trying to unlike the post , return the post 
+      if(type === "unlike"){
+        return {
+          data: post, 
+        };
+      }
+
+      else {
+        await db.like.create({
+          data:{
+            post: {
+              connect: {
+                id: postId
+              }
+            },
+            author: {
+              connect: {
+                id: userId
+              }
+            }
+          }
+        });
+        
+      }
+    }
+
+    const updatedPost = await db.post.findUnique({
+      where: {
+        id: postId
+      },
+      include: {
+        likes: true,
+      },
+    })
+
+    return {
+      data: updatedPost,
+    }
+  } catch (e) {
+    console.log(e);
+    throw new Error("Failed to Update Post Likes");
+    
+  }
+}

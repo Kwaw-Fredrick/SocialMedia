@@ -5,7 +5,7 @@ import css from '@/styles/postGenerator.module.css'
 import Box from './Box/Box'
 import { Avatar, Button, Flex, Image, Spin, Typography } from 'antd'
 import { useUser } from '@clerk/nextjs'
-import Input from 'antd/es/input/Input'
+import { Input } from 'antd'
 import { Icon } from '@iconify/react'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -85,7 +85,7 @@ const PostGenerator = () => {
                     </Typography>
                 }
             >
-                <div className="css.postGenWrapper">
+                <div className={css.postGenWrapper}>
                     <Box className={css.container}>
                         {/*top side */}
                         <Flex vertical gap={'1rem'} align='flex-start'>
@@ -131,8 +131,8 @@ const PostGenerator = () => {
                                                 <Image src={selectedFile}
                                                     alt="Selected Image"
                                                     className={css.preview}
-                                                    height={"10"}
-                                                    width={"20%"}
+                                                    height={"3500"}
+                                                    width={"100%"}
                                                 />
                                             )
                                         }

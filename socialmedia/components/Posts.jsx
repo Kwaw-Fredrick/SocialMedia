@@ -7,67 +7,67 @@ import React, { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import Post from './Post'
 
-const Posts = (id ="all") => {
+const Posts = ({ id = "all" }) => {
     const { ref, inView } = useInView()
 
-    const checkLastViewRef = (index, page) => {
-        if (index === page?.data?.length - 1) {
-            return true
-        } else {
-            return false
-        }
-    }
-
-    const { data, isLoading, isError, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage, isFetching } = useInfiniteQuery({
-        queryKey: ['posts'],
-        queryFn: ({ pageParam = '' }) => getMyFeedPosts(pageParam),
-        initialPageParam: '',
-        getNextPageParam: (lastPage) => lastPage?.metaData?.lastCursor,
-    })
+    const { data, isLoading, isError, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage, isFetching } =
+        useInfiniteQuery({
+            queryKey: ['posts', id],
+            queryFn: ({ pageParam = '' }) => getMyFeedPosts(pageParam),
+            initialPageParam: '',
+            getNextPageParam: (lastPage) => lastPage?.metaData?.lastCursor,
+        })
 
     useEffect(() => {
         if (inView && hasNextPage) {
             fetchNextPage()
         }
-    }, [hasNextPage, inView, fetchNextPage])
+    }, [inView, hasNextPage, fetchNextPage])
 
     if (isLoading) {
         return (
-            <Flex vertical align='center' gap="large">
+            <Flex vertical align="center" gap="large">
                 <Spin />
                 <Typography>Loading....</Typography>
             </Flex>
         )
     }
 
+    if (isError) {
+        return (
+            <Flex vertical align="center">
+                <Typography>Failed to load posts</Typography>
+            </Flex>
+        )
+    }
+
     if (isSuccess) {
         return (
-            <Flex vertical gap={"1rem"}>
-                {data?.pages?.map((page) =>
-                    page?.data?.map((post, index) =>
-                        checkLastViewRef(index, page) ? (
-                            <div
-                                ref={ref}
-                                key={post?.id}
-                            >
-                                <Post data={post} querryId={Id} />
+            <Flex vertical gap="1rem">
+                {data?.pages?.map((page, pageIndex) =>
+                    page?.data?.map((post, index) => {
+                        const isLast =
+                            pageIndex === data.pages.length - 1 &&
+                            index === page.data.length - 1
+
+                        return isLast ? (
+                            <div ref={ref} key={post?.id}>
+                                <Post data={post} queryId={id} />
                             </div>
                         ) : (
-                            <div
-                                key={post?.id}
-                            >
-                                <Post data={post} querryId={Id} />
+                            <div key={post?.id}>
+                                <Post data={post} queryId={id} />
                             </div>
                         )
-                    )
-                )}{
-                    (isFetchingNextPage || isFetching || isFetchingNextPage) && (
-                        <Flex vertical align='center' gap="large">
-                            <Spin />
-                            <Typography>Loading....</Typography>
-                        </Flex>
-                    )
-                }
+                    })
+                )}
+
+                {(isFetchingNextPage || isFetching) && (
+                    <Flex vertical align="center" gap="large">
+                        <Spin />
+                        <Typography>Loading....</Typography>
+                    </Flex>
+                )}
             </Flex>
         )
     }

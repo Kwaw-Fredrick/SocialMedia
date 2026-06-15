@@ -1,6 +1,7 @@
 import React from 'react'
 import css from '@/styles/homeView.module.css' 
 import PostGenerator from '@/components/PostGenerator'
+import Posts from '@/components/Posts'
 
 export const metadata = {
   title: `socialFredy's - Home`,
@@ -12,7 +13,8 @@ const MainPage = () => {
     <div className={css.wrapper}>
       <div className={css.postsArea}>
         <PostGenerator/>
-        <span>Posts</span>
+          <Posts />
+
       </div>
 
       <div className={css.right}>

@@ -4,79 +4,83 @@ import { Avatar, Flex, Image, Typography } from 'antd'
 import Box from './Box/Box'
 import { getFileTypeFromUrl } from '@/utils'
 import LikeButton from './LikeButton'
-const Post = ({ data, querryId   }) => {
+import dayjs from 'dayjs'
+import CommentButton from './CommentButton'
+
+const Post = ({ data, querryId }) => {
+
+    const fileType = getFileTypeFromUrl(data?.media)
+
     return (
         <div className={css.wrapper}>
-           <Box className={css.container}>
-            {/*profile information*/}
-            <Flex align="center" justify="space-between">
-                {/*left content*/}
-                <Flex align="center" gap={'.5rem'}>
-                    <Avatar 
-                    src={data?.author?.image_url} 
-                    size={40} />
+            <Box className={css.container}>
 
-                    {/*name and post date*/}
-                    <Flex vertical>
-                        <Typography className='typoSubtitle2'>
-                            {data?.author?.first_name} {data?.author?.last_name}
-                        </Typography>
+                {/* profile */}
+                <Flex align="center" justify="space-between">
+                    <Flex align="center" gap=".5rem">
+                        <Avatar src={data?.author?.image_url} size={40} />
 
-                        <Typography.Text 
-                        className='typoCaption'
-                        type='secondary'
-                        strong
-                        >
-                            {dayjs( data?.created_at).format("DD MMM YYYY")}
-                        </Typography.Text>
+                        <Flex vertical>
+                            <Typography className="typoSubtitle2">
+                                {data?.author?.first_name} {data?.author?.last_name}
+                            </Typography>
+
+                            <Typography.Text
+                                className="typoCaption"
+                                type="secondary"
+                                strong
+                            >
+                                {dayjs(data?.created_at).format("DD MMM YYYY")}
+                            </Typography.Text>
+                        </Flex>
                     </Flex>
                 </Flex>
-            </Flex>
 
-            {/*caption*/}
+                {/* caption */}
+                <Typography.Text>
+                    <div
+                        dangerouslySetInnerHTML={{
+                            __html: data?.postText?.replace(/\n/g, "<br />") || "",
+                        }}
+                    />
+                </Typography.Text>
 
-            <Typography.Text>
-                 <div
-                    dangerouslySetInnerHTML={{
-                        __html: data?.postText?replace(/\n/g, "<br />"):"", 
-                    }}
-                 />
-            </Typography.Text>
-
-            {/*post media*/}
-
-            {
-                getFileTypeFromUrl(data?.media) === "video" &&  (
+                {/* media */}
+                {fileType === "video" && (
                     <div className={css.media}>
-                        <video 
-                        src={data?.media} 
-                        alt="Post media" 
-                        controls 
-                        style={{objectFit: "cover"}} />
-                    </div>
-                )
-            }
-            {
-                getFileTypeFromUrl(data?.media) === "video" &&  (
-                    <div className={css.media}>
-                        <video 
-                        src={data?.media} 
-                        alt="Post media"  
-                        controls
-                        style={{height: "100%", width: "100%"}}
+                        <video
+                            src={data?.media}
+                            controls
+                            style={{ width: "100%", objectFit: "cover" }}
                         />
                     </div>
-                )
-            }
+                )}
 
-            {/*actions*/}
-            <Flex align="center" gap={'.5rem'} className={css.actions}>
-                    <LikeButton postId={data?.id} likes={data?.likes} querryId={querryId} />
-                    <span> Comments </span>
-            </Flex>
-           </Box>
+                {fileType === "image" && (
+                    <div className={css.media}>
+                        <Image
+                            src={data?.media}
+                            alt="Post media"
+                            style={{ width: "100%", objectFit: "cover" }}
+                        />
+                    </div>
+                )}
+
+                {/* actions */}
+               <Flex align="center" gap=".5rem" className={css.actions}>
+                    <LikeButton
+                        postId={data?.id}
+                        likes={data?.likes}
+                        querryId={querryId}
+                    />
+
+                    <CommentButton/>
+
+                </Flex>
+
+            </Box>
         </div>
     )
 }
 
-export default Post 
+export default Post
