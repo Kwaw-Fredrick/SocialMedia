@@ -74,7 +74,7 @@ const Post = ({ data, querryId }) => {
                         querryId={querryId}
                     />
 
-                    <CommentButton/>
+                    <CommentButton comments={data?.comments.lenght}/>
 
                 </Flex>
 
