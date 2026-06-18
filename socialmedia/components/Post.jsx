@@ -6,6 +6,7 @@ import { getFileTypeFromUrl } from '@/utils'
 import LikeButton from './LikeButton'
 import dayjs from 'dayjs'
 import CommentButton from './CommentButton'
+import CommentSection from './CommentSection'
 
 const Post = ({ data, querryId }) => {
 
@@ -74,9 +75,15 @@ const Post = ({ data, querryId }) => {
                         querryId={querryId}
                     />
 
-                    <CommentButton comments={data?.comments.lenght}/>
-
+                    <CommentButton comments={data?.comments.length}/>
                 </Flex>
+                
+                {/*Comment Section */}
+                <CommentSection
+                comments={data?.comments}
+                postId = {data?.id}
+                querryId={querryId}
+                />
 
             </Box>
         </div>
