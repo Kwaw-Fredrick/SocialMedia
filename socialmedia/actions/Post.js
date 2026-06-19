@@ -156,7 +156,7 @@ export const updatePostLike = async(params) => {
         });
         
       }
-    }
+    };
 
     const updatedPost = await db.post.findUnique({
       where: {
@@ -178,33 +178,23 @@ export const updatePostLike = async(params) => {
 };
 
 
-export const addComment = async (postId, comment) =>{
-  try {
-    const{id: userId} = await currentUser()
-    const newComment = await db.comment({
-      data:{
-        comment, 
-        post: {
-          connect:{
-            id: postId
-          }
-        },
-        author:{
-          connect: {
-            id: userId
-          }
-        }
-      }
-    });
-    console.log("comment created", newComment);
-    return{
-      data: newComment
-    };
-    
-    
-  } catch (e) {
-    console.log(e);
-    throw new Error("Failed to add comment");
-    
+export const addComment = async (postId, comment) => {
+
+  const user = await currentUser()
+
+  console.log("USER:", user?.id)
+
+  if (!user?.id) {
+    throw new Error("Not authenticated")
   }
+
+  const newComment = await db.comment.create({
+    data: {
+      content: comment,
+      post: { connect: { id: postId } },
+      author: { connect: { id: user.id } }
+    }
+  })
+
+  return { data: newComment }
 }

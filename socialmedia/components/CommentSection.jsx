@@ -5,6 +5,7 @@ import css from '@/styles/CommentSection.module.css'
 import { Button, Flex } from 'antd';
 import React from 'react'
 import CommentInput from './CommentInput';
+import Comment from './Comment';
 
 const CommentSection = ({comments, postId, queryId}) => {
     const [expanded, setExpanded] = React.useState(false);
@@ -30,10 +31,10 @@ const CommentSection = ({comments, postId, queryId}) => {
                 <Flex vertical gap={'0.5rem'} className={css.commentsContainer}>
                     {
                         !expanded ? (
-                            <span>Not expanded</span>
+                            <Comment data={comments[comments.length - 1]}/>
                         ) : (
-                            comments.map((comments, index) =>(
-                                <span key={index}>Expanded comments</span>
+                            comments.map((comment, index) =>(
+                                <Comment key={index} data={comment}/>
                             ))
                         )
                     }
@@ -44,7 +45,7 @@ const CommentSection = ({comments, postId, queryId}) => {
     </>
 
     {/*comments input*/}
-    <CommentInput queryId={queryId} postId />
+    <CommentInput queryId={queryId} postId ={postId} />
      </Flex>
   )
 } 

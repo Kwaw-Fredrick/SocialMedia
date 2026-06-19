@@ -5,10 +5,9 @@ import Box from './Box/Box'
 import { getFileTypeFromUrl } from '@/utils'
 import LikeButton from './LikeButton'
 import dayjs from 'dayjs'
-import CommentButton from './CommentButton'
 import CommentSection from './CommentSection'
 
-const Post = ({ data, querryId }) => {
+const Post = ({ data, queryId }) => {
 
     const fileType = getFileTypeFromUrl(data?.media)
 
@@ -72,17 +71,17 @@ const Post = ({ data, querryId }) => {
                     <LikeButton
                         postId={data?.id}
                         likes={data?.likes}
-                        querryId={querryId}
+                        queryId={queryId}
                     />
 
-                    <CommentButton comments={data?.comments.length}/>
                 </Flex>
                 
                 {/*Comment Section */}
                 <CommentSection
                 comments={data?.comments}
+                expanded= {false}
                 postId = {data?.id}
-                querryId={querryId}
+                queryId={queryId}
                 />
 
             </Box>
