@@ -7,11 +7,11 @@ const CommentButton = ({comments}) => {
    <Button>
     <Flex gap={'0.5rem'} align= 'center'>
         <Icon
-         icon="iconamoon: comment-dots-fill"
+         icon="iconamoon:comment-dots-fill"
          width={"21"}
          color='grey'
         />
-        <Typography.Text>
+        <Typography.Text className="typoBody2">
             {comments > 0? `${comments} Comments` : "Comment" }
         </Typography.Text>
     </Flex>

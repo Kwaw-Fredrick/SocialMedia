@@ -45,7 +45,7 @@ const CommentInput = ({ postId, setExpanded, queryId }) => {
                                             ...post.comments,
                                             {
                                                 id: Date.now(),
-                                                comment: value,
+                                                content: value,
                                                 authorId: user?.id,
                                                 author: {
                                                     first_name: user?.firstName,

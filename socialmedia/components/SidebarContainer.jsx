@@ -10,7 +10,7 @@ const SidebarContainer = ({isDrawerOpen,setIsDrawerOpen ,children, ...other }) =
     placement="left"
     open={isDrawerOpen}
     onClose={setIsDrawerOpen}
-    height={"100%"}
+    size="default"
     className={css.SidebarContainer}
     >
         <div className={css.drawerContainer}>

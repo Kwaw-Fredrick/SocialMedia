@@ -1,7 +1,7 @@
 'use client'
 
 import { Icon } from '@iconify/react/dist/iconify.js';
-import css from '@/styles/CommentSection.module.css'
+import css from '../styles/CommentSection.module.css'
 import { Button, Flex } from 'antd';
 import React from 'react'
 import CommentInput from './CommentInput';
@@ -45,7 +45,8 @@ const CommentSection = ({comments, postId, queryId}) => {
     </>
 
     {/*comments input*/}
-    <CommentInput queryId={queryId} postId ={postId} />
+    <CommentInput queryId={queryId} postId ={postId}      setExpanded={setExpanded}
+/>
      </Flex>
   )
 } 
